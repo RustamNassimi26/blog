@@ -1,1 +1,0 @@
-{"ast":null,"code":"export const environment = {\n  production: false,\n  apiKey: 'AIzaSyA_6I8XcaARcu5TvNl-QwsgE6cdm30BLFA',\n  fbDbUrl: \"https://angular-ac168-default-rtdb.europe-west1.firebasedatabase.app/\"\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
