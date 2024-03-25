@@ -1,13 +1,18 @@
-import {Component, OnInit} from '@angular/core'
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {User} from '../../shared/interfaces';
-import {AuthService} from '../shared/services/auth.service';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { User } from '../../shared/interfaces';
+import { AuthService } from '../shared/services/auth.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgIf, NgClass, AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPageComponent implements OnInit {
 
@@ -44,18 +49,13 @@ export class LoginPageComponent implements OnInit {
   }
 
   submit() {
-    if (this.form.invalid) {
-      return
-    }
-
     this.submitted = true
 
     const user: User = {
-      email: this.form.value.email,
-      password: this.form.value.password
+      ...this.form.getRawValue()
     }
 
-    this.auth.login(user).subscribe(() => {
+    this.auth.login(user).pipe(take(1)).subscribe(() => {
       this.form.reset()
       this.router.navigate(['/admin', 'dashboard'])
       this.submitted = false
